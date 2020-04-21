@@ -1,0 +1,21 @@
+{
+  "name": "todo-list-backend",
+  "version": "1.0.0",
+  "description": "",
+  "author": "bishoy adly",
+  "license": "ISC",
+  "main": "src/server.ts",
+  "scripts": {
+    "test": "jest",
+    "start": "node src"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jest": "^25.4.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
