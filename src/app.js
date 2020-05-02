@@ -4,11 +4,8 @@ const app = express();
 app.set('port', process.env.PORT);
 app.use(express.json());
 app.use((request, response, next) => {
-    console.log(`${request.url} ${request.method}`);
+    // console.log(`${request.method} ${request.url}`);
     next();
 });
 app.use('/api/v1', router);
-const server = app.listen(app.get('port'), args => {
-    console.log(`Server listend on  port ${app.get('port')}`);
-});
-module.exports = server;
+module.exports = app;
