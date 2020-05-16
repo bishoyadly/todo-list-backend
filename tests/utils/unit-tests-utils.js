@@ -2,7 +2,7 @@ jest.mock('src/database');
 const app = require('src/app');
 
 function buildRequest(requestObj) {
-    const {params = {}, body = {}, query = {}} = requestObj || {};
+    const {params = {}, body = {}, query = {}, headers = {}} = requestObj || {};
     const request = {
         get: function () {
 
@@ -10,6 +10,7 @@ function buildRequest(requestObj) {
         params: params,
         body: body,
         query: query,
+        headers: headers
     };
     return request;
 }

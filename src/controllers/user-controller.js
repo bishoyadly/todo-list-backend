@@ -45,10 +45,10 @@ class UserController {
         }
     }
 
-    static async userLogin(request, response) {
+    static async getUser(request, response) {
         response
             .status(HttpStatus.OK)
-            .send('logged in');
+            .send('token is valid');
     }
 }
 
