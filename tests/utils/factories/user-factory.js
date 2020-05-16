@@ -7,7 +7,7 @@ class UserFactory {
         userObj.firstName = faker.name.firstName();
         userObj.lastName = faker.name.lastName();
         userObj.email = faker.internet.email();
-        userObj.password = faker.internet.password();
+        userObj.password = 'A@12345';
         return userObj;
     }
 

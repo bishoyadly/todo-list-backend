@@ -4,7 +4,6 @@ class UserService {
 
     static async createNewUser(userObj) {
         await UserModel.create(userObj);
-        console.log('user created');
     }
 
 }

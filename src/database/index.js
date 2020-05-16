@@ -15,6 +15,7 @@ async function setupDatabaseConnection() {
             await sequelizeInstance.authenticate();
             console.log('Connection has been established successfully.');
             initializeDatabaseModels(sequelizeInstance);
+            // sequelizeInstance.sync({force: true})
         } catch (error) {
             console.error('Unable to connect to the database:', error);
         }

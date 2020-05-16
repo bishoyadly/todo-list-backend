@@ -1,7 +1,7 @@
 const HttpStatus = require('http-status-codes');
 const {buildRequest, buildResponse} = require('tests/utils/general-utils');
 const userController = require('src/controllers/user-controller');
-const UserFactory = require('tests/utils/user-factory');
+const UserFactory = require('tests/utils/factories/user-factory');
 
 jest.mock('src/services/user-service');
 
