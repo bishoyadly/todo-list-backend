@@ -22,6 +22,10 @@ function buildResponse() {
     return response;
 }
 
+function buildNext() {
+    return jest.fn().mockName('next');
+}
+
 module.exports = {
-    buildRequest, buildResponse
+    buildRequest, buildResponse, buildNext
 };

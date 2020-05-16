@@ -41,6 +41,13 @@ class UserFactory {
         delete userObj.password;
         return userObj;
     }
+
+    static buildUserCredentials() {
+        const credentialsObj = {};
+        credentialsObj.email = faker.internet.email();
+        credentialsObj.password = 'A@12345';
+        return credentialsObj;
+    }
 }
 
 module.exports = UserFactory;

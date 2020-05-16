@@ -44,6 +44,12 @@ class UserController {
             return HttpStatus.BAD_REQUEST;
         }
     }
+
+    static async userLogin(request, response) {
+        response
+            .status(HttpStatus.OK)
+            .send('logged in');
+    }
 }
 
 module.exports = UserController;
