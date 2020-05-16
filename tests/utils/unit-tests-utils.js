@@ -22,15 +22,6 @@ function buildResponse() {
     return response;
 }
 
-async function startServer() {
-    return new Promise((resolve, reject) => {
-        const server = app.listen(() => {
-            resolve(server);
-            console.log('Test Server listens on port ', server.address().port);
-        })
-    })
-}
-
 module.exports = {
-    startServer, buildRequest, buildResponse
+    buildRequest, buildResponse
 };

@@ -1,22 +1,9 @@
-require("dotenv").config({path: ".env.test"});
-const setupDatabaseConnection = require("src/database");
+require('tests/utils/integration-tests-utils');
 const userModel = require("src/database/models/user-model");
-const userFactory = require("tests/utils/factories/user-factory");
-
-let sequelizeInstance;
-beforeAll(async () => {
-    sequelizeInstance = await setupDatabaseConnection();
-    await sequelizeInstance.sync({force: true});
-});
-
-afterAll(async () => {
-    await sequelizeInstance.truncate();
-    await sequelizeInstance.close();
-    console.log("db connection closed");
-});
+const UserFactory = require("tests/utils/factories/user-factory");
 
 async function validateUserField(field, value, expectedError) {
-    const userObj = userFactory.buildUser();
+    const userObj = UserFactory.buildUser();
     userObj[field] = value;
     let queryError;
     try {
@@ -30,7 +17,7 @@ async function validateUserField(field, value, expectedError) {
 }
 
 test("create user with valid data", async () => {
-    const userObj = userFactory.buildUser();
+    const userObj = UserFactory.buildUser();
     await userModel.create(userObj);
     const queryResult = await userModel.findOne({
         where: {
@@ -56,28 +43,12 @@ test('create user with invalid email', async () => {
     await validateUserField('email', 'invalidEmail', 'Validation error: Validation isEmail on email failed');
 });
 
-test('create user with invalid password (does not contain capital character)', async () => {
-    await validateUserField('password', '@12345', 'Validation error: password must contain at least one capital character');
-});
-
-test('create user with invalid password (does not contain special character)', async () => {
-    await validateUserField('password', 'A12345', 'Validation error: password must contain at least one special character');
-});
-
-test('create user with invalid password (does not contain numeric character)', async () => {
-    await validateUserField('password', 'A@bcd', 'Validation error: password must contain at least one numeric character');
-});
-
-test("create user with invalid password (does not contain numeric character)", async () => {
-    await validateUserField("password", "A@bcd", "Validation error: password must contain at least one numeric character");
-});
-
 test("create user with null password", async () => {
     await validateUserField("password", null, "notNull Violation: user.password cannot be null");
 });
 
 test("create two users with the same email (primary key)", async () => {
-    const userObj = userFactory.buildUser();
+    const userObj = UserFactory.buildUser();
     let queryError;
     try {
         await userModel.create(userObj);

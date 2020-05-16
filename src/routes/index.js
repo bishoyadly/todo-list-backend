@@ -9,7 +9,7 @@ router
     .post((request, response) => {
         response
             .status(200)
-            .send('');
+            .send('logged in');
     });
 
 module.exports = router;
