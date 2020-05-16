@@ -25,20 +25,21 @@ test('create new user with valid body', async () => {
 });
 
 test('create new user exception case', async () => {
+    let error = new Error('Validation error: Validation isAlpha on firstName failed');
+    error.name = 'SequelizeValidationError';
     userService.createNewUser.mockImplementationOnce(() => {
-        throw new Error();
+        throw error;
     });
     const userObj = UserFactory.buildUser();
     const request = buildRequest({body: userObj});
     const response = buildResponse();
 
     await userController.createUser(request, response);
-    expect(response.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-    expect(response.send).toHaveBeenCalledWith("Failed to persist new user data");
+    expect(response.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+    expect(response.send).toHaveBeenCalledWith(error.message);
     expect(userService.createNewUser).toHaveBeenCalledTimes(1);
     userService.createNewUser.mockReset();
 });
-
 
 test('create new user with missing firstName', async () => {
     const userObj = UserFactory.buildUserMissingFirstName();
@@ -49,7 +50,6 @@ test('create new user with missing firstName', async () => {
     expect(response.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(response.send).toHaveBeenCalledWith(getExpectedErrorMessage('firstName'));
 });
-
 
 test('create new user with missing lastName', async () => {
     const userObj = UserFactory.buildUserMissingLastName();

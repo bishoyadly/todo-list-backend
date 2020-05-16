@@ -7,7 +7,7 @@
   "main": "src/server.ts",
   "scripts": {
     "test": "jest",
-    "start": "node src"
+    "start": "node index.js"
   },
   "dependencies": {
     "app-module-path": "^2.2.0",
@@ -27,6 +27,7 @@
     ]
   },
   "devDependencies": {
-    "faker": "^4.1.0"
+    "faker": "^4.1.0",
+    "prettier": "^2.0.5"
   }
 }

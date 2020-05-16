@@ -5,7 +5,7 @@ class UserFactory {
     static buildUser() {
         const userObj = {};
         userObj.firstName = faker.name.firstName();
-        userObj.lastName = faker.name.lastName();
+        userObj.lastName = 'Mills';
         userObj.email = faker.internet.email();
         userObj.password = 'A@12345';
         return userObj;

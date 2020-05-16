@@ -33,8 +33,8 @@ class UserController {
 
             } catch (error) {
                 response
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .send('Failed to persist new user data');
+                    .status(HttpStatus.BAD_REQUEST)
+                    .send(error.message);
             }
 
         } else {

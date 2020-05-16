@@ -1,3 +1,4 @@
+require('dotenv').config({path: '.env'});
 require('app-module-path').addPath(__dirname);
 const setupDatabaseConnection = require('./src/database');
 setupDatabaseConnection();

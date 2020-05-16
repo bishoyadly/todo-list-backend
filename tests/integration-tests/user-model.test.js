@@ -1,6 +1,7 @@
-const setupDatabaseConnection = require('src/database');
-const userModel = require('src/database/models/user-model');
-const userFactory = require('tests/utils/factories/user-factory');
+require("dotenv").config({path: ".env.test"});
+const setupDatabaseConnection = require("src/database");
+const userModel = require("src/database/models/user-model");
+const userFactory = require("tests/utils/factories/user-factory");
 
 let sequelizeInstance;
 beforeAll(async () => {
@@ -11,7 +12,7 @@ beforeAll(async () => {
 afterAll(async () => {
     await sequelizeInstance.truncate();
     await sequelizeInstance.close();
-    console.log('db connection closed');
+    console.log("db connection closed");
 });
 
 async function validateUserField(field, value, expectedError) {
@@ -24,17 +25,17 @@ async function validateUserField(field, value, expectedError) {
         queryError = error;
     }
     expect(queryError).not.toBe(undefined);
-    expect(queryError.name).toBe('SequelizeValidationError');
+    expect(queryError.name).toBe("SequelizeValidationError");
     expect(queryError.message).toBe(expectedError);
 }
 
-test('create user with valid data', async () => {
+test("create user with valid data", async () => {
     const userObj = userFactory.buildUser();
     await userModel.create(userObj);
     const queryResult = await userModel.findOne({
         where: {
-            email: userObj.email
-        }
+            email: userObj.email,
+        },
     });
     const actualUserObj = queryResult.dataValues;
     expect(actualUserObj.firstName).toBe(userObj.firstName);
@@ -65,4 +66,26 @@ test('create user with invalid password (does not contain special character)', a
 
 test('create user with invalid password (does not contain numeric character)', async () => {
     await validateUserField('password', 'A@bcd', 'Validation error: password must contain at least one numeric character');
+});
+
+test("create user with invalid password (does not contain numeric character)", async () => {
+    await validateUserField("password", "A@bcd", "Validation error: password must contain at least one numeric character");
+});
+
+test("create user with null password", async () => {
+    await validateUserField("password", null, "notNull Violation: user.password cannot be null");
+});
+
+test("create two users with the same email (primary key)", async () => {
+    const userObj = userFactory.buildUser();
+    let queryError;
+    try {
+        await userModel.create(userObj);
+        await userModel.create(userObj);
+    } catch (error) {
+        queryError = error;
+    }
+    expect(queryError).not.toBe(undefined);
+    expect(queryError.name).toBe('SequelizeUniqueConstraintError');
+    expect(queryError.errors[0].message).toBe('email must be unique');
 });
