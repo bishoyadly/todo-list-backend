@@ -1,5 +1,5 @@
-require('tests/utils/integration-tests-utils');
-const userModel = require("src/database/models/user-model");
+const {deleteCreatedUserByEmail} = require('tests/utils/integration-tests-utils');
+const UserModel = require("src/database/models/user-model");
 const UserFactory = require("tests/utils/factories/user-factory");
 
 async function validateUserField(field, value, expectedError) {
@@ -7,21 +7,22 @@ async function validateUserField(field, value, expectedError) {
     userObj[field] = value;
     let queryError;
     try {
-        await userModel.create(userObj);
+        await UserModel.create(userObj);
     } catch (error) {
         queryError = error;
     }
     expect(queryError).not.toBe(undefined);
     expect(queryError.name).toBe("SequelizeValidationError");
     expect(queryError.message).toBe(expectedError);
+    await deleteCreatedUserByEmail(userObj.email);
 }
 
 test("create user with valid data", async () => {
     const userObj = UserFactory.buildUser();
-    await userModel.create(userObj);
-    const queryResult = await userModel.findOne({
+    await UserModel.create(userObj);
+    const queryResult = await UserModel.findOne({
         where: {
-            email: userObj.email,
+            email: userObj.email
         },
     });
     const actualUserObj = queryResult.dataValues;
@@ -29,6 +30,7 @@ test("create user with valid data", async () => {
     expect(actualUserObj.lastName).toBe(userObj.lastName);
     expect(actualUserObj.email).toBe(userObj.email);
     expect(actualUserObj.password).toBe(userObj.password);
+    await deleteCreatedUserByEmail(userObj.email);
 });
 
 test('create user with invalid firstName', async () => {
@@ -51,12 +53,13 @@ test("create two users with the same email (primary key)", async () => {
     const userObj = UserFactory.buildUser();
     let queryError;
     try {
-        await userModel.create(userObj);
-        await userModel.create(userObj);
+        await UserModel.create(userObj);
+        await UserModel.create(userObj);
     } catch (error) {
         queryError = error;
     }
     expect(queryError).not.toBe(undefined);
     expect(queryError.name).toBe('SequelizeUniqueConstraintError');
     expect(queryError.errors[0].message).toBe('email must be unique');
+    await deleteCreatedUserByEmail(userObj.email);
 });

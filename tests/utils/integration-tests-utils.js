@@ -1,13 +1,12 @@
 require("dotenv").config({path: ".env.test"});
 const setupDatabaseConnection = require("src/database");
+const UserModel = require("src/database/models/user-model");
 let sequelizeInstance;
 beforeAll(async () => {
     sequelizeInstance = await setupDatabaseConnection();
-    await sequelizeInstance.sync({force: true});
 });
 
 afterAll(async () => {
-    await sequelizeInstance.truncate();
     await sequelizeInstance.close();
     console.log("db connection closed");
 });
@@ -21,6 +20,14 @@ async function startServer() {
     })
 }
 
+async function deleteCreatedUserByEmail(email) {
+    await UserModel.destroy({
+        where: {
+            email: email
+        }
+    });
+}
+
 module.exports = {
-    startServer
+    startServer, deleteCreatedUserByEmail
 };

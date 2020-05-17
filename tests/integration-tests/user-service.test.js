@@ -1,4 +1,4 @@
-require('tests/utils/integration-tests-utils');
+const {deleteCreatedUserByEmail} = require('tests/utils/integration-tests-utils');
 const bcrypt = require('bcrypt');
 const UserFactory = require('tests/utils/factories/user-factory');
 const UserModel = require('src/database/models/user-model');
@@ -15,4 +15,5 @@ test("user created password is encrypted", async () => {
     const actualUserObj = queryResult.dataValues;
     const isEqual = await bcrypt.compare(userObj.password, actualUserObj.password);
     expect(isEqual).toBe(true);
+    await deleteCreatedUserByEmail(userObj.email);
 });

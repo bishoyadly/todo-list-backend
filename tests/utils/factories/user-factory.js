@@ -6,7 +6,7 @@ class UserFactory {
         const userObj = {};
         userObj.firstName = faker.name.firstName();
         userObj.lastName = 'Mills';
-        userObj.email = faker.internet.email();
+        userObj.email = Date.now() + faker.internet.email();
         userObj.password = 'A@12345';
         return userObj;
     }
